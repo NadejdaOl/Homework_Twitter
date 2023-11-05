@@ -4,9 +4,9 @@
     padding: 0;
 }
 
-body{
+/* body{
     background: #000000;
-}
+} */
 
 #wrapper{
     width: 37.4rem;
@@ -39,14 +39,19 @@ h1{
     font-size: 1.25rem;
     margin-bottom: 1.5rem;
     margin-left: 4.75rem;
+    
 }
 
-#commentForm{
+#postForm{
     width: 37.4rem;
     height: 3.3rem;
     margin-top: 1.25rem;
     color: #6E767D;
     background: #000000;
+
+}
+.newPost{
+    color: #ffffff;
 }
 
 button{
@@ -81,3 +86,12 @@ button:active{
     gap: 14px;
     margin-left: 4.25rem;
 }
+
+.post {
+    background-color: #000000;
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+

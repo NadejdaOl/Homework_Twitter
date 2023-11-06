@@ -1,8 +1,59 @@
 const root = document.querySelector("#root");
 const form = document.querySelector("#postForm");
-const commentInput = document.querySelector("#comment");
+const comment = document.querySelector("#comment");
 const wrapper = document.querySelector("#wrapper")
 
+let countLike = ""
+
+const renderPost = (comment, user) => {
+     const postList = document.createElement('div')
+     postList.classList.add('postElement')
+
+     const postMain = document.createElement('div')
+     postMain.classList.add('postMain')
+    //  postMain.append(avatar, boxAvatar)
+
+     const postText = document.createElement('p')
+     postText.innerText = comment.body //post.body
+     
+
+     const image = document.createElement('img')
+     image.classList.add('image_post')
+     image.src = 'media/image 1.svg'
+
+     const reaction = document.createElement('img')
+     reaction.classList.add('reaction')
+    //  reaction.innerText = post.reactions;
+     reaction.src = 'media/heart-regular.svg'
+
+     const countLike = document.createElement('span')
+     countLike.innerText = countLike
+
+     const likeMain = document.createElement('div')
+     likeMain.classList.add('likeMain')
+     likeMain.append(reaction, countLike)
+
+     const userName = document.createElement('p')
+     userName.innerText = `@ ${user.firstName}`
+
+     const avatar = document.createElement('img')
+     avatar.classList.add('avatar')
+     avatar.src = user.image
+     
+     const boxAvatar = document.createElement('div')
+     boxAvatar.classList.add('boxAvatar')
+     boxAvatar.append(userName, postText)
+
+     postList.append(postMain, image, likeMain)
+     wrapper.append(postList)
+
+      reaction.addEventListener('click', () => {
+        countLike++
+        countLike.innerText = countLike
+        reaction.src = 'media/heart-regular.svg'
+      })
+
+} 
 
 
 // Функция для получения всех постов
@@ -21,57 +72,36 @@ const wrapper = document.querySelector("#wrapper")
     }
   }
 
-// Функция для получения имени пользователя по userId
+
 async function getUserName(userId) {
     const response = await fetch(`https://dummyjson.com/users/${userId}`);
-    const user = await response.json();
-    return user.name;
+    const userData = await response.json();
+    return userData;
   }
-
-
- // Функция для добавления нового поста
-async function addPost(comment) {
-    const response = await fetch('https://dummyjson.com/posts/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: 'I am in love with someone.',
-          userId: 5,
-          /* other post data */
-        })
-      })
-    
-    const newPost = await response.json();
-    return newPost;
-  }
- // Обработчик события отправки формы
-
- document.getElementById('postForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const comment = document.getElementById('comment').value;
-    if (comment) {
-      const newPost = await addPost(comment);
-      const userName = await getUserName(newPost.userId);
-
-      const postElement = document.createElement('div');
-      postElement.innerHTML = `<p>User: ${userName}</p>
-                               <p>Comment: ${newPost.title}</p>`;
-      wrapper.appendChild(postElement);
-      
-      document.getElementById('comment').value = ''; // Очищаем поле ввода
-            }
-        });
-
 
 getPosts()
 .then(async (data) => {
   if (Array.isArray(data.posts)) {
     for (const post of data.posts) {
       if (post.userId) {
-        const userName = await getUserName(post.userId);
+        const userInfo = await getUserName(post.userId);
+
         const postElement = document.createElement('div');
-        postElement.innerHTML = `<p>User: ${userName}</p><p>Comment: ${post.title}</p>`;
-        wrapper.appendChild(postElement);
+        postElement.classList.add('postElement');
+
+        const reaction = document.createElement('p');
+        reaction.classList.add('reaction')
+        reaction.innerText = post.reactions;
+        reaction.src = 'media/heart-regular.svg'
+
+        const userImage = document.createElement('img');
+        userImage.classList.add('userImage');
+        userImage.src = userInfo.image;
+
+        postElement.innerHTML = `<p> @ ${userInfo.firstName}</p>
+                                 <p> ${post.body}</p>`;
+        postElement.append(userImage, reaction);                         
+        wrapper.append(postElement);
       }
     }
   }
@@ -80,83 +110,41 @@ getPosts()
   console.error(error);
 });
 
-// Загрузка постов при запуске страницы
-// window.addEventListener('DOMContentLoaded', async () => {
-//   const posts = await getPosts();
-//   displayPosts(posts);
-// });
-// //=================
-
-//  новый пост на странице
-// const postElement = document.createElement('div');
-//     postElement.innerHTML = `<p>User: ${userName}</p><p>Comment: ${newPost.comment}</p>`;
-//     document.body.appendChild(postElement);
-    
-
-// очист поле ввода комментария
-// document.getElementById('comment').value = '';
-//   }
-// });
 
 
+async function addPost(post) {
+    try {
+        const response = await fetch('https://dummyjson.com/posts/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(post)
+              
+            })
+          
+  const postData = await response.json();
+  const userResponse = await fetch ('https://dummyjson.com/user/1');
+  const userInfo = await userResponse.json();
+  console.log(userInfo);
+  renderPost (postData, userInfo);  
+    } catch (error) {
+        console.error(error);
+    }
+  }
+  
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+    const newPost = {
+      body: comment.value,
+      userId: 1
+    }
+    console.log(newPost);
+    addPost(newPost)
+    comment.value = ''
+  }
+)
+console.log('hello AnnA!');
 
-// // Функция для добавления нового поста
-// async function addPost(comment) {
-//   try {
-//       const response = await fetch('https://dummyjson.com/posts/add', {
-//           method: 'POST',
-//           headers: {
-//               'Content-Type': 'application/json'
-//           },
-//           body: JSON.stringify({
-//               comment: comment
-//               // Другие данные для отправки, если есть
-//           })
-//       });
 
-//       if (response.ok) {
-//           const newPost = await response.json();
-//           return newPost;
-//       } else {
-//           throw new Error('Не удалось добавить новый пост');
-//       }
-//   } catch (error) {
-//       console.error(error);
-//   }
-// }
-
-// // Обработчик отправки формы
-// document.getElementById('postForm').addEventListener('submit', async (event) => {
-//   event.preventDefault();
-//   const comment = document.getElementById('comment').value;
-//   if (comment) {
-//       const newPost = await addPost(comment);
-//       const posts = await getPosts();
-//       displayPosts(posts);
-//       document.getElementById('comment').value = ''; // Очищаем поле ввода
-//   }
-// });
-
-// // Загрузка постов при запуске страницы
-// window.addEventListener('DOMContentLoaded', async () => {
-//   const posts = await getPosts();
-//   displayPosts(posts);
-// });
-
- // Функция для отображения постов
-//  function displayPosts(posts) {
-//   const postList = document.getElementById('postList');
-//   postList.innerHTML = ''; // Очищаем содержимое для обновления
-
-//   posts.forEach(async (post) => {
-//       const userName = await getUserName(post.userId);
-//       const postElement = document.createElement('div');
-//       postElement.innerHTML = `
-//           <p>User: ${userName}</p>
-//           <p>Comment: ${post.title}</p>
-//           <hr>
-//       `;
-//       postList.appendChild(postElement);
-//   });
-// }
 

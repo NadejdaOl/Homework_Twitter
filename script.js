@@ -1,10 +1,11 @@
 const root = document.querySelector("#root");
 const form = document.querySelector("#postForm");
 const input = document.querySelector("input");
+const header = document.querySelector("header")
 const comment = document.querySelector("#comment");
 const wrapper = document.querySelector("#wrapper");
 
-let countLike = "";
+let countLike = 0;
 
 const renderPost = (comment, user) => {
   const postList = document.createElement("div");
@@ -13,14 +14,11 @@ const renderPost = (comment, user) => {
   const postMain = document.createElement("div");
   postMain.classList.add("postMain");
   
-
   const postText = document.createElement("p");
   postText.innerText = comment.body; //post.body
 
   const image = document.createElement("img");
-  // image.classList.add("image_post");
-  // image.src = "media/image 1.svg";
-
+  
   const reaction = document.createElement("img");
   reaction.classList.add("reaction");
   reaction.src = "media/heart11.png";
@@ -40,6 +38,7 @@ const renderPost = (comment, user) => {
   likeMain.append(reaction, likeCounter);
 
   const userName = document.createElement("p");
+  userName.classList.add('userName1')
   userName.innerText = `@ ${user.firstName}`;
 
   const avatar = document.createElement("img");
@@ -49,16 +48,14 @@ const renderPost = (comment, user) => {
   const boxAvatar = document.createElement("div");
   boxAvatar.classList.add("boxAvatar");
 
-  
   postMain.append(avatar, boxAvatar);
   boxAvatar.append(userName, postText);
   postList.append(postMain, image, likeMain);
-  postForm.appendChild(postList, getPosts());
-  wrapper.appendChild(postForm);
+
+
+  wrapper.appendChild(header, postForm);
   root.appendChild(wrapper);
 };
-
-// Функция для получения всех постов
 
 async function getPosts() {
   try {
@@ -131,6 +128,7 @@ getPosts()
           wrapper.append(commentAll);
           root.appendChild(wrapper);
           postForm.appendChild(commentAll);
+          
         }
       }
     }
@@ -153,7 +151,16 @@ async function addPost(post) {
     const userResponse = await fetch("https://dummyjson.com/user/1");
     const userInfo = await userResponse.json();
     console.log(userInfo);
+
+    // const fotoUser = document.createElement('img');
+    // fotoUser.classList('fotoUser')
+    // fotoUser.src = `${user.image}`; 
+
+    // postForm.append(fotoUser) 
+
     renderPost(postData, userInfo);
+ 
+    
   } catch (error) {
     console.error(error);
   }

@@ -7,14 +7,17 @@
 body {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
   background: #000000;
-  color: #ffffff;
-}
+  color: #ffffff; 
+ }
 
 #wrapper {
-  width: 100%;
+  /* width: 100%; */
   margin: auto;
+  background: #000000;
+  color: #ffffff;
+  height: 100%;
   
 }
 
@@ -127,6 +130,7 @@ button:active {
 
 .postElement {
   display: flex;
+  /* margin-top: 60px; */
 }
 
 .reaction {

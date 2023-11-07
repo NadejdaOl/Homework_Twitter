@@ -5,42 +5,17 @@ const header = document.querySelector("header")
 const comment = document.querySelector("#comment");
 const wrapper = document.querySelector("#wrapper");
 
+
 let countLike = 0;
 
 const renderPost = (comment, user) => {
   const postList = document.createElement("div");
   postList.classList.add("postList");
+  const image = document.createElement("img");
 
   const postMain = document.createElement("div");
   postMain.classList.add("postMain");
   
-  const postText = document.createElement("p");
-  postText.innerText = comment.body; //post.body
-
-  const image = document.createElement("img");
-  
-  const reaction = document.createElement("img");
-  reaction.classList.add("reaction");
-  reaction.src = "media/heart11.png";
-
-  const likeCounter = document.createElement("span");
-  // likeCounter.innerText = countLike;
-
-  reaction.addEventListener("click", () => {
-    countLike++;
-    likeCounter.innerText = countLike;
-    reaction.src = "media/heart1.png";
-  });
-  likeCounter.innerText = countLike;
-
-  const likeMain = document.createElement("div");
-  likeMain.classList.add("likeMain");
-  likeMain.append(reaction, likeCounter);
-
-  const userName = document.createElement("p");
-  userName.classList.add('userName1')
-  userName.innerText = `@ ${user.firstName}`;
-
   const avatar = document.createElement("img");
   avatar.classList.add("avatar");
   avatar.src = user.image;
@@ -48,13 +23,36 @@ const renderPost = (comment, user) => {
   const boxAvatar = document.createElement("div");
   boxAvatar.classList.add("boxAvatar");
 
-  postMain.append(avatar, boxAvatar);
+  const userName = document.createElement("p");
+  userName.classList.add('userName')
+  userName.innerText = `@ ${user.firstName}`;
+  
+  const postText = document.createElement("p");
+  postText.innerText = comment.body; //post.body
+
+  const reaction = document.createElement("img");
+  reaction.classList.add("reaction");
+  reaction.src = "media/heart11.png";
+
+  const likeCounter = document.createElement("span");
+
+  reaction.addEventListener("click", () => {
+    countLike++;
+    likeCounter.innerText = countLike;
+    reaction.src = "media/heart1.png";
+  });
+
+  likeCounter.innerText = countLike;
+
+  const likeMain = document.createElement("div");
+  likeMain.classList.add("likeMain");
+
+  likeMain.append(reaction, likeCounter);
   boxAvatar.append(userName, postText);
+  postMain.append(avatar, boxAvatar);
   postList.append(postMain, image, likeMain);
-
-
-  wrapper.appendChild(header, postForm);
-  root.appendChild(wrapper);
+  wrapper.appendChild(postList);
+  
 };
 
 async function getPosts() {
@@ -125,9 +123,9 @@ getPosts()
           likeDiv.append(reaction, likeCounter);
           postElement.append(userImage, userData);
           commentAll.append(postElement, likeDiv);
-          wrapper.append(commentAll);
-          root.appendChild(wrapper);
-          postForm.appendChild(commentAll);
+          // wrapper.append(commentAll);
+          form.append(commentAll);
+          wrapper.append(form);
           
         }
       }
@@ -152,15 +150,8 @@ async function addPost(post) {
     const userInfo = await userResponse.json();
     console.log(userInfo);
 
-    // const fotoUser = document.createElement('img');
-    // fotoUser.classList('fotoUser')
-    // fotoUser.src = `${user.image}`; 
-
-    // postForm.append(fotoUser) 
-
     renderPost(postData, userInfo);
- 
-    
+
   } catch (error) {
     console.error(error);
   }
@@ -176,3 +167,4 @@ form.addEventListener("submit", async (event) => {
   addPost(newPost);
   input.value = "";
 });
+

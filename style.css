@@ -51,7 +51,7 @@ h1 {
   border: none;
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
-  margin-left: 4.4rem;
+  margin-left: 1.4rem;
   color: #ffffff;
 }
 
@@ -114,14 +114,16 @@ button:active {
 .avatar{
   width: 3.75rem;
   height: 3.75rem;
+  
 }
 
-.fotoUser{
+
+/* .fotoUser{
     width: 24px;
     height: 24px;
     margin-left: 10px;
     border-radius: 50%;
-}
+} */
 
 .image_post {
   margin-top: 50px;

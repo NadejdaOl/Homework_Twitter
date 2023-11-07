@@ -4,7 +4,8 @@ const input = document.querySelector("input");
 const header = document.querySelector("header")
 const comment = document.querySelector("#comment");
 const wrapper = document.querySelector("#wrapper");
-
+const userImage = document.querySelector('#userName1')
+const id = 10
 
 let countLike = 0;
 
@@ -73,6 +74,7 @@ async function getUserName(userId) {
   const response = await fetch(`https://dummyjson.com/users/${userId}`);
   const userData = await response.json();
   return userData;
+  
 }
 
 getPosts()
@@ -118,14 +120,14 @@ getPosts()
 
           const userPost = document.createElement('p');
           userPost.innerText = `${post.body}`;
-
+          
+          form.append(userImage)
           userData.append(nikUser, userPost);
           likeDiv.append(reaction, likeCounter);
           postElement.append(userImage, userData);
           commentAll.append(postElement, likeDiv);
           wrapper.append(commentAll);
-          // form.append(commentAll);
-          // wrapper.append(form);
+
           
         }
       }
@@ -146,12 +148,16 @@ async function addPost(post) {
     });
 
     const postData = await response.json();
-    const userResponse = await fetch("https://dummyjson.com/user/1");
+    const userResponse = await fetch("https://dummyjson.com/user/10");
     const userInfo = await userResponse.json();
     console.log(userInfo);
 
     renderPost(postData, userInfo);
-
+    
+    // const userPost = userInfo.find(user => user.id === id);
+    // if (userPost) {
+    //   userImage.src = userPost.image
+    // }
   } catch (error) {
     console.error(error);
   }

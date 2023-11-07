@@ -50,7 +50,7 @@ const renderPost = (comment, user) => {
   likeMain.append(reaction, likeCounter);
   boxAvatar.append(userName, postText);
   postMain.append(avatar, boxAvatar);
-  postList.append(postMain, image, likeMain);
+  postList.append(postMain,likeMain);
   wrapper.appendChild(postList);
   
 };
@@ -123,9 +123,9 @@ getPosts()
           likeDiv.append(reaction, likeCounter);
           postElement.append(userImage, userData);
           commentAll.append(postElement, likeDiv);
-          // wrapper.append(commentAll);
-          form.append(commentAll);
-          wrapper.append(form);
+          wrapper.append(commentAll);
+          // form.append(commentAll);
+          // wrapper.append(form);
           
         }
       }

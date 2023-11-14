@@ -5,14 +5,18 @@ const header = document.querySelector("header")
 const comment = document.querySelector("#comment");
 const wrapper = document.querySelector("#wrapper");
 const userImage = document.querySelector('#userName1')
-const id = 10
+
+
+const postList = document.createElement("div");
+const commentsAll = document.createElement('div')
 
 let countLike = 0;
 
 const renderPost = (comment, user) => {
   const postList = document.createElement("div");
   postList.classList.add("postList");
-  const image = document.createElement("img");
+
+  userImage.src = user.image
 
   const postMain = document.createElement("div");
   postMain.classList.add("postMain");
@@ -52,9 +56,12 @@ const renderPost = (comment, user) => {
   boxAvatar.append(userName, postText);
   postMain.append(avatar, boxAvatar);
   postList.append(postMain,likeMain);
-  wrapper.appendChild(postList);
+  wrapper.append(postList);
   
-};
+
+  };
+
+  // commentAll.prepend(postList)
 
 async function getPosts() {
   try {
@@ -76,6 +83,13 @@ async function getUserName(userId) {
   return userData;
   
 }
+
+async function userImageFunc(userId) {
+    const response = await fetch(`https://dummyjson.com/users/${userId}`)
+    const userData = await response.json()
+    userImage.src = userData.image
+}
+userImageFunc(10)
 
 getPosts()
   .then(async (data) => {
@@ -126,9 +140,14 @@ getPosts()
           likeDiv.append(reaction, likeCounter);
           postElement.append(userImage, userData);
           commentAll.append(postElement, likeDiv);
-          wrapper.append(commentAll);
-
+          wrapper.appendChild(commentAll);
           
+          
+          userImage.addEventListener('click', () => {
+            // console.log(post.userId);
+            window.location.href = `/user.html?userId=${post.userId}`
+            })
+ 
         }
       }
     }
@@ -136,7 +155,7 @@ getPosts()
   .catch((error) => {
     console.error(error);
   });
-
+  
 async function addPost(post) {
   try {
     const response = await fetch("https://dummyjson.com/posts/add", {
@@ -154,10 +173,8 @@ async function addPost(post) {
 
     renderPost(postData, userInfo);
     
-    // const userPost = userInfo.find(user => user.id === id);
-    // if (userPost) {
-    //   userImage.src = userPost.image
-    // }
+    
+    
   } catch (error) {
     console.error(error);
   }
@@ -173,4 +190,25 @@ form.addEventListener("submit", async (event) => {
   addPost(newPost);
   input.value = "";
 });
+
+// Функция для получения данных о пользователе и его постах с сервера
+// async function getUserAndPosts(userId) {
+//   try {
+//       // Запрашиваем данные о пользователе и его постах
+//       const [userData, postsData] = await Promise.all([
+//           fetch(`https://dummyjson.com/users/${userId}`).then(response => response.json()),
+//           fetch(`https://dummyjson.com/posts/user/${userId}`).then(response => response.json())
+//       ]);
+
+//       // Отображаем данные о пользователе и его постах на странице
+//       // Ваш код для отображения данных на странице пользователя
+//       console.log(userData);
+//       console.log(postsData);
+//   } catch (error) {
+//       console.error('Ошибка при получении данных:', error);
+//   }
+// }
+
+// // Вызываем функцию для получения данных при загрузке страницы
+// getUserAndPosts(userId);
 
